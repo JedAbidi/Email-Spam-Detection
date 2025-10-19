@@ -1,81 +1,97 @@
+# Email Spam Detection
 
-## Implementation Steps
+## Overview
 
-### 1. Data Preprocessing
-- **Duplicate Removal**: Removed 33 duplicate entries
-- **Text Cleaning**: 
-  - Removed non-word characters using regex
-  - Converted to lowercase
-  - Removed extra whitespaces
-- **Tokenization**: Split text into individual words using NLTK
-- **Stopword Removal**: Filtered out common English stopwords
+This project develops a machine learning model to detect spam emails using a dataset of email texts. It preprocesses email content, removes duplicates, tokenizes text, and trains a Bidirectional LSTM model with TensorFlow/Keras to classify emails as spam or non-spam (binary classification). The project includes data visualization and model evaluation.
 
-### 2. Feature Engineering
-- **Text Vectorization**: Converted tokens to integer sequences using Keras Tokenizer
-- **Padding**: Ensured uniform sequence length with post-padding
+## Dataset
 
-### 3. Model Architecture
-- **Embedding Layer**: 128-dimensional word embeddings
-- **Bidirectional LSTM**: 64 units with dropout regularization
-- **Dense Layers**: 64 and 32 units with ReLU activation
-- **Output Layer**: Single neuron with sigmoid activation for binary classification
+- **Source**: Custom dataset (`emails.csv`) with preprocessed version (`cleaned_emails.csv`).
+- **Description**: Contains 5,728 email records (5,695 after duplicate removal), with columns:
+  - `text`: Email content with subjects.
+  - `spam`: Binary label (1 for spam, 0 for non-spam).
+- **Size**: Original: 8,745 KB; Cleaned: 16,301 KB.
 
-### 4. Training Configuration
-- **Optimizer**: Adam
-- **Loss Function**: Binary Crossentropy
-- **Metrics**: Accuracy
-- **Early Stopping**: Monitored validation loss with patience=3
-- **Batch Size**: 32
-- **Train/Validation/Test Split**: 60%/20%/20%
+## Features
+
+- **Data Preprocessing**: Removes duplicates, cleans text (removes non-word characters, extra spaces), and applies tokenization with stopword removal.
+- **Model**: Uses a Bidirectional LSTM with Embedding, Dense, and Dropout layers for spam classification.
+- **Evaluation**: Splits data into 60% training, 20% validation, and 20% test sets; reports accuracy on the test set.
+
+## Requirements
+
+- Python 3.x
+- Libraries (listed in `requirements.txt`):
+  ```
+  tensorflow
+  matplotlib
+  pandas
+  re
+  nltk
+  ```
+- Optional: GPU support (e.g., NVIDIA) with CUDA and cuDNN for faster training.
+
+## Setup
+
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/JedAbidi/Email-Spam-Detection.git
+   cd email-spam-detection
+   ```
+
+2. **Set Up**:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Download Dataset**:
+   - Ensure `emails.csv` (8,745 KB) is in the project directory.
+   - The notebook generates `cleaned_emails.csv` (16,301 KB) during execution.
+
+## Usage
+
+1. **Run the Notebook**:
+   ```bash
+   jupyter notebook Email_Spam_Detection.ipynb
+   ```
+
+2. **Key Steps**:
+   - **Load Data**: Reads `emails.csv` and displays column info.
+   - **Preprocessing**: Removes duplicates, cleans text, tokenizes, and removes stopwords.
+   - **Model Training**: Trains the LSTM model with early stopping on validation data.
+   - **Evaluation**: Reports test accuracy (e.g., ~98.68% in sample run).
+
+3. **Outputs**:
+   - Cleaned dataset saved as `cleaned_emails.csv`.
+   - Test accuracy printed after model evaluation.
+
+## Project Structure
+
+```
+email-spam-detection/
+├── .idea                  # IDE configuration folder
+├── cleaned_emails.csv    # Preprocessed dataset (16,301 KB)
+├── Email_Spam_Detection.ipynb  # Main Jupyter Notebook
+├── emails.csv            # Original dataset (8,745 KB)
+├── requirements.txt      # Dependencies
+├── README.md             # This file
+```
 
 ## Results
 
-- **Training Accuracy**: ~100%
-- **Validation Accuracy**: 98.95%
-- **Test Accuracy**: 98.68%
+- Removed 33 duplicates, reducing the dataset to 5,695 emails.
+- Achieved a test accuracy of approximately 98.68% with the LSTM model after 4 epochs (early stopping applied).
+- Text cleaning and tokenization successfully prepared data for model input.
 
-## Dependencies
+## Future Improvements
 
-```txt
-tensorflow>=2.0.0
-pandas
-nltk
-scikit-learn
-matplotlib
+- Add advanced text preprocessing (e.g., stemming, lemmatization).
+- Experiment with other models (e.g., CNN, Transformers).
+- Implement cross-validation for robust performance metrics.
+- Optimize model hyperparameters for better efficiency.
 
-Installation & Usage
-Clone the repository:
+## Acknowledgments
 
-bash
-git clone https://github.com/yourusername/spam-detection.git
-cd spam-detection
-Install required packages:
-
-bash
-pip install tensorflow pandas nltk scikit-learn matplotlib
-Download NLTK data:
-
-python
-import nltk
-nltk.download('punkt')
-nltk.download('stopwords')
-nltk.download('punkt_tab')
-Open and run the Jupyter notebook Untitled4 (1).ipynb to train and evaluate the model.
-
-Code Implementation Highlights
-Text Cleaning Function
-python
-def clean_text(text):
-    text = re.sub(r'\W', ' ', text)  # Remove non-word characters
-    text = re.sub(r'\s+', ' ', text)  # Remove extra spaces
-    return text.lower()
-Model Architecture
-python
-model = Sequential([
-    Embedding(vocab_size, 128, input_length=max_length),
-    Bidirectional(LSTM(64, dropout=0.2, recurrent_dropout=0.2)),
-    Dense(64, activation='relu'),
-    Dropout(0.5),
-    Dense(32, activation='relu'),
-    Dense(1, activation='sigmoid')
-])
+- [NLTK](https://www.nltk.org) for text processing tools.
+- [TensorFlow](https://www.tensorflow.org) for the deep learning framework.
+- The open-source community for supporting libraries.
